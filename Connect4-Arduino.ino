@@ -1,5 +1,7 @@
 #include <SPI.h>
+#include <ezBuzzer.h>
 
+#include "Arduino.h"
 #include "testlib.h"
 #include "game.h"
 
@@ -7,6 +9,8 @@
 #define CS_A 10
 #define DIN 11
 #define CLK 13
+
+#define PWD_BUZZER 3
 
 // Endereços de controle (vindos do protocolo SPI)
 #define DECODE_MODE 9
@@ -43,6 +47,10 @@ static void setDebouncedInput(uint8_t pin) {
     pinMode(pin, INPUT);
 }
 
+static void victory_sound() {
+    // digitalWrite(PWD_BUZZER, uint8_t val);
+}
+
 struct game game;
 
 void setup() {
@@ -50,6 +58,8 @@ void setup() {
 
     pinMode(CS_A, OUTPUT);
     pinMode(CS_B, OUTPUT);
+
+    pinMode(PWD_BUZZER, OUTPUT);
 
     setDebouncedInput(RIGHT_PLAYER_A);
     setDebouncedInput(LEFT_PLAYER_A);
@@ -98,6 +108,8 @@ void loop() {
         Serial.print("Jogador ");
         Serial.print(game.curr_player == 0 ? "JOGADOR A" : "JOGADOR B");
         Serial.print(" venceu\r\n");
+
+        victory_sound();
 
         // Loop infinito
         while(1){
