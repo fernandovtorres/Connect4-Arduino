@@ -5,12 +5,12 @@
 
 #define GAME_DIM 8
 
-#define LEFT_PLAYER_A 7
-#define ENTER_PLAYER_A 6
-#define RIGHT_PLAYER_A 5
+#define LEFT_PLAYER_A 8
+#define ENTER_PLAYER_A 7
+#define RIGHT_PLAYER_A 6
 
-#define LEFT_PLAYER_B 4
-#define ENTER_PLAYER_B 3
+#define LEFT_PLAYER_B 5
+#define ENTER_PLAYER_B 4
 #define RIGHT_PLAYER_B 2
 
 enum position : int8_t {
