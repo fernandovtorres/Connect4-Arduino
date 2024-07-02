@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.6.0">
+<eagle version="9.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -7448,6 +7448,79 @@ Source: http://catalog.osram-os.com .. LA_LR_LS_LY_P47F_Pb_free.pdf</description
 </deviceset>
 </devicesets>
 </library>
+<library name="buzzer" urn="urn:adsk.eagle:library:113">
+<description>&lt;b&gt;Speakers and Buzzers&lt;/b&gt;&lt;p&gt;
+&lt;ul&gt;Distributors:
+&lt;li&gt;Buerklin
+&lt;li&gt;Spoerle
+&lt;li&gt;Schukat
+&lt;/ul&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="F/TMB" urn="urn:adsk.eagle:footprint:5217/1" library_version="2">
+<description>&lt;b&gt;BUZZER&lt;/b&gt;</description>
+<wire x1="3.429" y1="2.54" x2="4.191" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="3.81" y1="2.159" x2="3.81" y2="2.921" width="0.1524" layer="21"/>
+<circle x="0" y="0" radius="6.096" width="0.1524" layer="21"/>
+<circle x="0" y="0" radius="1.27" width="0.1524" layer="21"/>
+<circle x="3.81" y="2.54" radius="0.762" width="0.1524" layer="21"/>
+<pad name="-" x="-3.81" y="0" drill="1.016" diameter="2.159" shape="octagon"/>
+<pad name="+" x="3.81" y="0" drill="1.016" diameter="2.159" shape="octagon"/>
+<text x="-3.81" y="-3.81" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+<text x="3.302" y="5.715" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+</package>
+</packages>
+<packages3d>
+<package3d name="F/TMB" urn="urn:adsk.eagle:package:5260/1" type="box" library_version="2">
+<description>BUZZER</description>
+<packageinstances>
+<packageinstance name="F/TMB"/>
+</packageinstances>
+</package3d>
+</packages3d>
+<symbols>
+<symbol name="B" urn="urn:adsk.eagle:symbol:5216/1" library_version="2">
+<wire x1="-2.54" y1="5.08" x2="5.08" y2="5.08" width="0.254" layer="94" curve="180"/>
+<wire x1="-2.54" y1="5.08" x2="1.27" y2="5.08" width="0.254" layer="94"/>
+<wire x1="1.27" y1="1.27" x2="1.27" y2="5.08" width="0.1524" layer="94"/>
+<wire x1="1.27" y1="5.08" x2="5.08" y2="5.08" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-2.54" x2="2.54" y2="1.397" width="0.1524" layer="94"/>
+<wire x1="0" y1="-2.54" x2="0" y2="1.397" width="0.1524" layer="94"/>
+<text x="-2.54" y="6.35" size="1.778" layer="95">&gt;NAME</text>
+<text x="5.08" y="0" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="-" x="5.08" y="-2.54" visible="pad" length="short" direction="pas" rot="R180"/>
+<pin name="+" x="-2.54" y="-2.54" visible="pad" length="short" direction="pas"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="F/TMB" urn="urn:adsk.eagle:component:5296/2" prefix="SG" library_version="2">
+<description>&lt;b&gt;BUZZER&lt;/b&gt;&lt;p&gt; Source: Buerklin</description>
+<gates>
+<gate name="1" symbol="B" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="F/TMB">
+<connects>
+<connect gate="1" pin="+" pad="+"/>
+<connect gate="1" pin="-" pad="-"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:5260/1"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="" constant="no"/>
+<attribute name="OC_FARNELL" value="unknown" constant="no"/>
+<attribute name="OC_NEWARK" value="unknown" constant="no"/>
+<attribute name="POPULARITY" value="1" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -7613,6 +7686,7 @@ Source: http://catalog.osram-os.com .. LA_LR_LS_LY_P47F_Pb_free.pdf</description
 <part name="LED128" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="*P4" device="-BOTTOM" package3d_urn="urn:adsk.eagle:package:15878/1" technology="LA"/>
 <part name="C7" library="capacitor-wima" library_urn="urn:adsk.eagle:library:116" deviceset="C" device="2,5-3" package3d_urn="urn:adsk.eagle:package:5436/1"/>
 <part name="C8" library="capacitor-wima" library_urn="urn:adsk.eagle:library:116" deviceset="C" device="2,5-3" package3d_urn="urn:adsk.eagle:package:5436/1"/>
+<part name="SG1" library="buzzer" library_urn="urn:adsk.eagle:library:113" deviceset="F/TMB" device="" package3d_urn="urn:adsk.eagle:package:5260/1"/>
 </parts>
 <sheets>
 <sheet>
@@ -8109,6 +8183,9 @@ Source: http://catalog.osram-os.com .. LA_LR_LS_LY_P47F_Pb_free.pdf</description
 <attribute name="NAME" x="131.064" y="-40.259" size="1.778" layer="95"/>
 <attribute name="VALUE" x="131.064" y="-45.339" size="1.778" layer="96"/>
 </instance>
+<instance part="SG1" gate="1" x="53.34" y="68.58" smashed="yes">
+<attribute name="NAME" x="50.8" y="74.93" size="1.778" layer="95"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -8239,6 +8316,12 @@ Source: http://catalog.osram-os.com .. LA_LR_LS_LY_P47F_Pb_free.pdf</description
 <pinref part="C8" gate="G$1" pin="2"/>
 <wire x1="129.54" y1="-45.72" x2="129.54" y2="-48.26" width="0.1524" layer="91"/>
 <junction x="129.54" y="-48.26"/>
+<pinref part="SG1" gate="1" pin="-"/>
+<wire x1="58.42" y1="66.04" x2="66.04" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="66.04" y1="66.04" x2="66.04" y2="86.36" width="0.1524" layer="91"/>
+<wire x1="66.04" y1="86.36" x2="7.62" y2="86.36" width="0.1524" layer="91"/>
+<wire x1="7.62" y1="86.36" x2="7.62" y2="35.56" width="0.1524" layer="91"/>
+<junction x="7.62" y="35.56"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -9865,6 +9948,13 @@ Source: http://catalog.osram-os.com .. LA_LR_LS_LY_P47F_Pb_free.pdf</description
 <wire x1="167.64" y1="-60.96" x2="167.64" y2="-182.88" width="0.1524" layer="91"/>
 <wire x1="167.64" y1="-182.88" x2="185.42" y2="-182.88" width="0.1524" layer="91"/>
 <junction x="185.42" y="-182.88"/>
+</segment>
+</net>
+<net name="N$39" class="0">
+<segment>
+<pinref part="ARDUINO" gate="G$1" pin="*D3"/>
+<pinref part="SG1" gate="1" pin="+"/>
+<wire x1="43.18" y1="66.04" x2="50.8" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
