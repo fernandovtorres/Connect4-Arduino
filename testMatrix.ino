@@ -15,6 +15,9 @@
 #define SHUTDOWN 12
 #define DISPLAY_TEST 16
 
+/*
+    Função que desliga todos os leds da matriz
+*/
 static void initialize_matrix(uint8_t chip_select) {
     sendData(chip_select, DECODE_MODE, 0x00);
     sendData(chip_select, INTENSITY, 0x00);
@@ -27,6 +30,13 @@ static void initialize_matrix(uint8_t chip_select) {
     sendData(chip_select, SHUTDOWN, 0x01);
 }
 
+/*
+    Função que configura os pinos dos pushbuttons;
+    
+    Configurar os pinos somente como INPUT fazem com que eles sejam configurados incorretamente, 
+    assim primeiramente atribuímos os valores dos pinos como LOW para depois configurarmos eles
+    como INPUT.
+*/
 static void setDebouncedInput(uint8_t pin) {
     pinMode(pin, OUTPUT);
     digitalWrite(pin, LOW);

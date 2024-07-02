@@ -3,17 +3,22 @@
 
 #include <Arduino.h>
 
+/*
+    A maneira com que este array está ordenado, permite que as verificações das combinações sejam
+    feitas de maneira linear
+*/
 const static struct move neighbour_pos[] = {
     { 0,  1 }, {  1,  1 }, {  1,  0 }, {  1, -1 },
     { 0, -1 }, { -1, -1 }, { -1,  0 }, { -1,  1 }
 };
 
+/*
+    Função que verifica se uma coluna não está cheia, se ela não está, retorna o índice da primeira
+    linha não vazia da coluna
+*/
 static int col_is_not_full(struct game *game, int column)
 {
-
     for (int i = 0; i < GAME_DIM; i++) {
-        // if (game->board[i][column] == NONE)
-        //     return i;
         if (game->board[column][i] == NONE)
             return i;
     }
@@ -21,6 +26,9 @@ static int col_is_not_full(struct game *game, int column)
     return -1;
 }
 
+/*
+    Verifica se uma posição está vazia ou não
+*/
 static inline bool is_nonempty_pos(struct game *game, struct move *mv)
 {
     if ((mv->x < 0 || mv->y < 0) || (mv->x >= GAME_DIM || mv->y >= GAME_DIM))
@@ -29,6 +37,9 @@ static inline bool is_nonempty_pos(struct game *game, struct move *mv)
     return game->board[mv->y][mv->x] != NONE;
 }
 
+/*
+    Função que verifica se o jogador da rodada venceu o jogo
+*/
 bool check_win(struct game *game, struct move *mv)
 {
     if (game->board[mv->y][mv->x] == NONE)
@@ -59,6 +70,9 @@ bool check_win(struct game *game, struct move *mv)
     return false;
 }
 
+/*
+    Função que imprime um ponteiro no display de leds
+*/
 void print_arrow(int chip_select, int player, uint8_t ind, struct game *game) {
     // A verificação se a coluna está cheia deve ser feita em outra função
     byte buffer = 0;
@@ -79,6 +93,11 @@ void print_arrow(int chip_select, int player, uint8_t ind, struct game *game) {
     sendData(chip_select, ind+1, buffer);
 }
 
+/*
+    Função que procura a próxima coluna livre para inserção
+
+    A variável dir pode ser + ou - 1, indicando para qual direção queremos ir (+: direita; -: esquerda)
+*/
 int find_next_valid_index(struct game *game, int start_ind, int dir) {
     for (int i = (start_ind + dir + GAME_DIM) % GAME_DIM; i != start_ind; i = (i + dir + GAME_DIM) % GAME_DIM) {
         if (game->last_position[i] != 7)
@@ -88,6 +107,9 @@ int find_next_valid_index(struct game *game, int start_ind, int dir) {
     return -1;
 }
 
+/*
+    Função que interpreta os inputs dos jogadores e registra o movimento feito por eles
+*/
 struct move* make_move(uint8_t chip_select, struct game *game) {
     static struct move mv = {0};
 
@@ -161,6 +183,9 @@ struct move* make_move(uint8_t chip_select, struct game *game) {
     return &mv;
 }
 
+/*
+    Atualiza o estado de somente uma matriz de led selecionada pelo campo chip_select
+*/
 void update_board(uint8_t chip_select, struct game *game) {
     enum position pos = game->curr_player == 0 ? RED_CHECKER : YLW_CHECKER;
 
