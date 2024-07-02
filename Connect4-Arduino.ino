@@ -53,13 +53,13 @@ static void victory_sound() {
 
 struct game game;
 
+ezBuzzer buzzer(PWD_BUZZER);
+
 void setup() {
     Serial.begin(9600);
 
     pinMode(CS_A, OUTPUT);
     pinMode(CS_B, OUTPUT);
-
-    pinMode(PWD_BUZZER, OUTPUT);
 
     setDebouncedInput(RIGHT_PLAYER_A);
     setDebouncedInput(LEFT_PLAYER_A);
@@ -87,6 +87,7 @@ void setup() {
 uint8_t last_state = 0;
 
 void loop() {
+    // buzzer.loop();
     uint8_t chip_select = game.curr_player == 0 ? CS_A : CS_B;
 
     struct move *move = make_move(chip_select, &game);
@@ -109,11 +110,15 @@ void loop() {
         Serial.print(game.curr_player == 0 ? "JOGADOR A" : "JOGADOR B");
         Serial.print(" venceu\r\n");
 
-        victory_sound();
-
-        // Loop infinito
-        while(1){
-
+        unsigned long start_millis = millis();
+        unsigned long curr_millis = start_millis;
+        while (1) {
+            buzzer.loop();
+            buzzer.beep(250);
+            curr_millis = millis();
+            if (curr_millis - start_millis >= 250) {
+                buzzer.stop();
+            }
         }
     }
 
