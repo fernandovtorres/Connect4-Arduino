@@ -11,8 +11,11 @@
 
 O projeto realizado é uma representação do jogo Connect4 utilizando um arduino. O projeto foi feito utilizando duas matrizes de LED simulando o "tabuleiro" de cada jogador, o jogo acontece da seguinte forma, cada jogador joga por turnos sua peça e seu objetivo é fazer com que se alinhem (em qualquer direção) quatro de suas peças, o impecilho é que o oponente pode colocar uma peça dele visando atrapalhar a estratégia rival. Para a nossa versão, acrescentamos uma nova dificuldade: um jogador não consegue ver as peças do outro, apesar de elas continuarem interagindo entre si, o que traz um novo nível estratégico para a partida.
 
-# Circuito no Tinkercad
+# Esquemática do circuito
 
+A esquemática do circuito foi desenvolvida no Eagle (consideramos o Tinkercad, que não tem o IC controlador da matriz de LEDs, e o Wokwi, que não tem os capacitores usados para hardware debouncing).
+
+![Esquemática do circuito](/schematic/schematic.png)
 
 # Imagens
 
