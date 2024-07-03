@@ -19,6 +19,8 @@ A esquemática do circuito foi desenvolvida no Eagle (consideramos o Tinkercad, 
 
 # Imagens
 
- 
+![foto_1](/images/foto_1.jpg)
+![foto_2](/images/foto_2.jpg)
+![foto_3](/images/foto_3.jpg)
  
 # Vídeo explicativo
