@@ -3,6 +3,9 @@
 
 #include <Arduino.h>
 
+#define CS_B 9
+#define CS_A 10
+
 /*
     A maneira com que este array está ordenado, permite que as verificações das combinações sejam
     feitas de maneira linear
@@ -40,12 +43,10 @@ static inline bool is_nonempty_pos(struct game *game, struct move *mv)
 /*
     Função que verifica se o jogador da rodada venceu o jogo
 */
-bool check_win(struct game *game, struct move *mv)
+int check_win(struct game *game, struct move *mv, uint8_t same_neighbours[8])
 {
     if (game->board[mv->y][mv->x] == NONE)
         return false;
-
-    char same_neighbours[4] = {0};
 
     for (int i = 0; i < 8; i++) {
         struct move chk_pos = { mv->x, mv->y };
@@ -56,18 +57,74 @@ bool check_win(struct game *game, struct move *mv)
 
             if (is_nonempty_pos(game, &chk_pos) &&
                     game->board[mv->y][mv->x] == game->board[chk_pos.y][chk_pos.x])
-                same_neighbours[i % 4]++;
+                same_neighbours[i]++;
             else
                 break;
         }
     }
 
     for (int i = 0; i < 4; i++) {
-        if (same_neighbours[i] >= 3)
-            return true;
+        if (same_neighbours[i] + same_neighbours[i + 4] >= 3)
+            return i;
     }
 
-    return false;
+    return -1;
+}
+
+void show_winning_row(struct game *game, struct move *mv, int dir, uint8_t same_neighbours[8])
+{
+    int best_dir = same_neighbours[dir] > same_neighbours[dir + 4] ? dir : dir + 4;
+
+    struct move initial_pos = {
+        mv->x + neighbour_pos[best_dir].x * same_neighbours[best_dir],
+        mv->y + neighbour_pos[best_dir].y * same_neighbours[best_dir]
+    };
+
+    for (int total = same_neighbours[best_dir] + same_neighbours[(best_dir + 4) % 8]; total >= 3; total--) {
+        struct move cur_pos;
+
+        for (int i = 0; i < 6; i++) {
+            cur_pos = initial_pos;
+
+            for (int j = 0; j < 4; j++) {
+                game->board[cur_pos.y][cur_pos.x] = i % 2 == 0 ? BOTH : NONE;
+                cur_pos.x += neighbour_pos[(best_dir + 4) % 8].x;
+                cur_pos.y += neighbour_pos[(best_dir + 4) % 8].y;
+            }
+
+            int tmp = game->curr_player;
+
+            game->curr_player = 0;
+            update_board(CS_A, game);
+            game->curr_player = 1;
+            update_board(CS_B, game);
+
+            game->curr_player = tmp;
+
+            delay(200);
+        }
+
+        cur_pos = initial_pos;
+
+        for (int i = 0; i < 4; i++) {
+            game->board[cur_pos.y][cur_pos.x] = game->curr_player == 0 ? RED_CHECKER : YLW_CHECKER;
+
+            cur_pos.x += neighbour_pos[(best_dir + 4) % 8].x;
+            cur_pos.y += neighbour_pos[(best_dir + 4) % 8].y;
+        }
+
+        initial_pos.x += neighbour_pos[(best_dir + 4) % 8].x;
+        initial_pos.y += neighbour_pos[(best_dir + 4) % 8].y;
+    }
+
+    int tmp = game->curr_player;
+
+    game->curr_player = 0;
+    update_board(CS_A, game);
+    game->curr_player = 1;
+    update_board(CS_B, game);
+
+    game->curr_player = tmp;
 }
 
 /*
@@ -85,7 +142,8 @@ void print_arrow(int chip_select, int player, uint8_t ind, struct game *game) {
     }
 
     for (int i = 0; i < GAME_DIM; i++) {
-        buffer |= ((game->board[ind][7-i] == pos) << i);
+        buffer <<= 1;
+        buffer |= game->board[ind][i] == pos;
     }
 
     buffer |= B00000001;
@@ -164,7 +222,7 @@ struct move* make_move(uint8_t chip_select, struct game *game) {
         enum position pos = game->curr_player == 0 ? RED_CHECKER : YLW_CHECKER;
 
         update_board(chip_select, game);
-        
+
         curr_millis = millis();
 
         if (curr_millis - start_millis <= 500) {
@@ -190,10 +248,11 @@ void update_board(uint8_t chip_select, struct game *game) {
     enum position pos = game->curr_player == 0 ? RED_CHECKER : YLW_CHECKER;
 
     for (int j = 0; j < GAME_DIM; j++) {
-        byte buffer = 0;
+        uint8_t buffer = 0;
 
         for (int i = 0; i < GAME_DIM; i++) {
-            buffer |= ((game->board[j][7-i] == pos) << i);
+            buffer <<= 1;
+            buffer |= (game->board[j][i] == pos) || (game->board[j][i] == BOTH);
         }
 
         sendData(chip_select, j+1, buffer);

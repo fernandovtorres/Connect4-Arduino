@@ -36,8 +36,8 @@ static void initialize_matrix(uint8_t chip_select) {
 
 /*
     Função que configura os pinos dos pushbuttons;
-    
-    Configurar os pinos somente como INPUT fazem com que eles sejam configurados incorretamente, 
+
+    Configurar os pinos somente como INPUT fazem com que eles sejam configurados incorretamente,
     assim primeiramente atribuímos os valores dos pinos como LOW para depois configurarmos eles
     como INPUT.
 */
@@ -105,10 +105,21 @@ void loop() {
 
     update_board(chip_select, &game);
 
-    if (check_win(&game, move)) {
+    uint8_t same_neighbours[8] = { 0 };
+
+    int ret = check_win(&game, move, same_neighbours);
+
+    if (ret != -1) {
         Serial.print("Jogador ");
         Serial.print(game.curr_player == 0 ? "JOGADOR A" : "JOGADOR B");
         Serial.print(" venceu\r\n");
+
+        show_winning_row(&game, move, ret, same_neighbours);
+
+        for (int i = ret + 1; i < 4; i++) {
+            if (same_neighbours[i] + same_neighbours[i + 4] >= 3)
+                show_winning_row(&game, move, i, same_neighbours);
+        }
 
         unsigned long start_millis = millis();
         unsigned long curr_millis = start_millis;

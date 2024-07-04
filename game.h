@@ -16,7 +16,8 @@
 enum position : int8_t {
     NONE = 0,
     RED_CHECKER,
-    YLW_CHECKER
+    YLW_CHECKER,
+    BOTH
 };
 
 struct game {
@@ -35,6 +36,8 @@ struct move* make_move(uint8_t chip_select, struct game *game);
 
 void print_arrow(uint8_t chip_select, uint8_t ind, struct game *game);
 
-bool check_win(struct game *game, struct move *mv);
+int check_win(struct game *game, struct move *mv, uint8_t same_neighbours[8]);
+
+void show_winning_row(struct game *game, struct move *mv, int dir, uint8_t same_neighbours[8]);
 
 #endif
